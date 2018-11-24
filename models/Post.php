@@ -39,4 +39,28 @@ class Post
         $stmt->execute();
         return $stmt;
     }
+
+    public function readSingle()
+    {
+        $query = 'SELECT 
+                    c.name AS category_name,
+                    p.id,
+                    p.category_id,
+                    p.title,
+                    p.body,
+                    p.author,
+                    p.created_at
+                 FROM
+                    '. $this->table .' p
+                 LEFT JOIN
+                    categories c ON p.category_id = c.id
+                 WHERE
+                    p.id = ?
+                 LIMIT 0,1';
+
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+        return $stmt;
+    }
 }
